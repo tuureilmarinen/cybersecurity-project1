@@ -1,0 +1,10 @@
+<h2>Suggestions</h2>
+<ul>
+{% for profile in suggested_profiles %}
+    <li>
+        <a href="{% url 'profile' profile.id %}">
+            {{profile.user.username}}: {{profile.bio}}
+        </a>
+    </li>
+{% endfor %}
+</ul>

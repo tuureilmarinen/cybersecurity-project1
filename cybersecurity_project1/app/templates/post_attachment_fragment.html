@@ -1,0 +1,17 @@
+{% if post.attachments%}
+    <ul>
+        {% for attachment in post.attachments %}
+            <li>
+                {% if post.public or is_own_profile or is_follower %}
+                <img src="{% url 'post-attachment-show' post.profile.id post.id attachment.id %}" />
+                {% else %}
+                    <a href="{% url 'profile-follow' post.profile.id %}">
+                        Subscribe to {{post.profile.user.username}} to access pictures!
+                    </a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <!-- no attachments -->
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -20,10 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# A05:2021 – Security Misconfiguration
 SECRET_KEY = 'django-insecure-9e#gh$h^fgcs=ru@601&=df!gp&+iqdh(tgj&8nhw2#@9!#o+o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True  # A05:2021 – Security Misconfiguration
 
 ALLOWED_HOSTS = []
 
@@ -31,7 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'cybersecurity_project1.app',
+    'django.contrib.admin',  # A05:2021 – Security Misconfiguration -- Unused default apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

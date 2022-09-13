@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ profile.user.username }}</h2>
+{% if is_follower %}
+You are following {{ profile.user.username }}! You can access all {{ profile.user.username }}&apos;s content set to followers only!
+{% endif %}
+<ul>
+    {% for post in posts %}
+        <li>
+            {{ post.content }}
+            {% include "post_attachment_fragment.html" %}
+
+        </li>
+    {% endfor %}
+</ul>
+{% include "suggested_profiles_fragment.html" %}
+{% endblock %}
+

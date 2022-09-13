@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Posts from your friends</h2>
+{% for post in posts %}
+    <h3 id="post-{{post.id}}">{{post.profile.user.username}}</h3>
+    {{post.content}}
+    {% include "post_attachment_fragment.html" with is_follower=True %}
+    <hl/>
+{% empty %}
+    <p>
+        None of friends has posted anything.
+    </p>
+{% endfor %}
+
+{% include "suggested_profiles_fragment.html" %}
+
+{% endblock %}

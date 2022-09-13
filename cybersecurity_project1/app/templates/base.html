@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>
+            {% block site_title_head %}Site{% endblock %} - {% block title %}This is where title is supposed to be{% endblock %}
+        </title>
+    </head>
+    <body>
+        <header>
+            <h1>
+                <a href="{% url 'home' %}">
+                    {% block site_title %}This is where site title is supposed to be{% endblock %}
+                </a>
+            </h1>
+            {% if user.is_authenticated %}
+                Hello 
+                <a href="{% url 'profile' user.profile.id %}">
+                {{user.username}}
+                </a>!
+                <a href="{% url 'add-post' user.profile.id %}">
+                    New post.
+                </a> 
+                <a href="{% url 'logout' %}">logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">login</a> / <a href="{% url 'signup' %}">signup</a>
+            {% endif %}
+            <hr>
+        </header>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </body>
+</html>
