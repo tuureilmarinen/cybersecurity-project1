@@ -118,6 +118,7 @@ def searchPostsView(request):
     query_string = request.GET.get('q')
     posts = Post.objects.raw(
         "SELECT * FROM app_post WHERE content LIKE '%%%s%%'" % query_string)  # A03-2021 Injection
+    # Fix for A03-2021 Injection:
     # posts = Post.objects.filter(content__contains=query_string)
     return render(request, 'search.html', {'posts': posts, 'query_string': query_string})
     
