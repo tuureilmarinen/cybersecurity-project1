@@ -1,4 +1,4 @@
-from .app.views import homePageView, addPostView, deletePostView, displayAttachmentView, signupView, profileView, followProfileView
+from .app.views import homePageView, addPostView, deletePostView, displayAttachmentView, signupView, profileView, followProfileView, searchPostsView
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
@@ -66,8 +66,13 @@ urlpatterns = [
         name='post-attachment-show'
     ),
     path(
-        'profile/<int:profileid>/posts/<int:postid>',
+        'profile/<int:profileid>/posts/<int:postid>/delete',
         deletePostView,
         name='delete-post'
     ),
+    path(
+        'search',
+        searchPostsView,
+        name='search-post'
+    )
 ]

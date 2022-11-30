@@ -1,4 +1,31 @@
 from django import forms
+from django.core import validators
+from django.core.exceptions import ValidationError
+
+def image_validator(value):
+    try:
+        from PIL import Image
+    except ImportError:
+        return []
+    else:
+        try:
+            im = Image.open(value.file)
+            im.verify()
+        except:
+            raise ValidationError("File is not valid image")
+class SizeValidator(object):
+    def __init__(self, size) -> None:
+        self.size = size
+    def __call__(self, value):
+        if value.size > self.size:
+            raise ValidationError("File is too large")
+        return []
+class CustomFilesFiled(forms.FileField):
+    default_validators = [
+        validators.validate_image_file_extension,
+        SizeValidator(10*10**6), # 10MB
+        image_validator
+    ]
 
 class PostForm(forms.Form):
     content = forms.CharField(
@@ -10,7 +37,7 @@ class PostForm(forms.Form):
         label = "Is this public for anyone to see?",
         required = False
     )
-    attachment = forms.FileField(
+    attachment = CustomFilesFiled(
         widget = forms.ClearableFileInput(attrs = {'multiple': True}),
         required = False
     )

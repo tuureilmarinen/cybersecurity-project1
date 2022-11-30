@@ -8,12 +8,15 @@ from .forms import PostForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+
 @login_required
+@csrf_exempt # A01:2021 – Broken Access Control
 def deletePostView(request, profileid, postid):
-    profile = Post.objects.get(pk=postid)
-    # A06:2017-Security misconfiguration
-    profile.delete() if profile.profile.user == request.user else HttpResponseForbidden()
-    return redirect('/')
+    post_instance = Post.objects.get(pk=postid)
+    profileid = post_instance.profile.id
+    post_instance.delete() if post_instance.profile.user == request.user else HttpResponseForbidden()
+    return redirect('profile', profileid=profileid)
 
 
 @login_required
@@ -21,8 +24,7 @@ def displayAttachmentView(request, profileid, postid, attachmentid):
     f = PostAttachment.objects.get(pk=attachmentid)
     try:
         response = HttpResponse(f.content, content_type=f.content_type)
-        return response # A03:2017-Sensitive Data Exposure
-        return response if f.user.profile in request.user.profile.following else HttpResponseForbidden()
+        return response # if f.profile.user == request.user or f.user.profile in request.user.profile.following else HttpResponseForbidden()
     except ValueError:
         return HttpResponseNotFound()
 
@@ -112,8 +114,10 @@ def signupView(request):
             redirect('/')
     return render(request, 'signup.html', {'form': user_form})
 
-def searchPosts(request):
-    query = request.POST.get('q')
-    Post.objects.raw("SELECT * FROM app_post WHERE content LIKE '%%%s%%'"%query) #A03-2021 Injection
-    # A05-2017 - Broken Access Control
+def searchPostsView(request):
+    query_string = request.GET.get('q')
+    posts = Post.objects.raw(
+        "SELECT * FROM app_post WHERE content LIKE '%%%s%%'" % query_string)  # A03-2021 Injection
+    # posts = Post.objects.filter(content__contains=query_string)
+    return render(request, 'search.html', {'posts': posts, 'query_string': query_string})
     

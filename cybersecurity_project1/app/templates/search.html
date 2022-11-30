@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form method="get" target="{% url 'search-post' %}">
+    {% csrf_token %}
+    <input type="text" name="q" value="{{query_string}}" />
+    <button type="submit">Search</button>
+  </form>
+<h2>Search results</h2>
+{% for post in posts %}
+    <h3 id="post-{{post.id}}">{{post.profile.user.username}}</h3>
+    {{post.content}}
+    {% include "post_attachment_fragment.html" with is_follower=True %}
+    <hl/>
+{% empty %}
+    <p>
+        No posts found.
+    </p>
+{% endfor %}
+
+{% endblock %}

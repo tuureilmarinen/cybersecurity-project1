@@ -9,7 +9,11 @@ You are following {{ profile.user.username }}! You can access all {{ profile.use
         <li>
             {{ post.content }}
             {% include "post_attachment_fragment.html" %}
-
+            {% if is_own_profile %}
+                <form method="get" target="{% url 'delete-post' post.profile.id post.id %}">
+                    <button type="submit">Delete post</button>
+                </form>
+            {% endif %}
         </li>
     {% endfor %}
 </ul>
